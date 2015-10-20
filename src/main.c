@@ -11,11 +11,23 @@ int main(int argc, char *argv[], char *envp[]) {
   struct rusage rusage;
   int pid = fork();
   int i;
+  double seconds;
+  clock_t hour, hour_last;
 
   if (pid < 0){
     perror ("Error: ");
   } else if (pid > 0) {
     for (i = 0; i < 10; i++){
+      if (i != 1){
+        do{
+          hour = clock();
+          seconds = (hour - hour_last) / (double)CLOCKS_PER_SEC;
+        } while(seconds < 1);
+      hour_last = hour;
+      }
+      else{
+        hour_last = clock();
+      }
       getrusage(pid, &rusage);
       printf("Uso da Memória: %ld\n", rusage.ru_maxrss);
     /* by Lage:
@@ -23,7 +35,6 @@ int main(int argc, char *argv[], char *envp[]) {
      * CPU (em porcentagem) do processo filho
      * após 10 segundos de execução, mate o proceso filho*/
       printf("Uso de algo: %ld\n", rusage.ru_stime.tv_sec);
-      sleep(1);
     }
 
     kill(pid, SIGKILL);
