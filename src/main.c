@@ -2,32 +2,37 @@
 #include <sys/time.h>
 #include <sys/resource.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <signal.h>
 
 int main(int argc, char *argv[], char *envp[]) {
-  printf("hey");
 
-  struct rusage *rusage;
+  struct rusage rusage;
   int pid = fork();
+  int i;
 
   if (pid < 0){
-    //não funfou
-    printf("error");
+    perror ("Error: ");
   } else if (pid > 0) {
-    // tá no processo pai, tem que medir as coisas
-    // daqui a cada seg
-    getrusage(pid, rusage);
-    printf("%ld", rusage->ru_maxrss);
-    //printar a cada dez segudos 
-    // fora do loop medir o negocio
-    /* printf("%ld", rusage->ru_utime.tv_sec); */
+    for (i = 0; i < 10; i++){
+      getrusage(pid, &rusage);
+      printf("Uso da Memória: %ld\n", rusage.ru_maxrss);
+    /* by Lage:
+     * guarde a cada segundo o consumo de memória (em Kilobytes) e
+     * CPU (em porcentagem) do processo filho
+     * após 10 segundos de execução, mate o proceso filho*/
+      printf("Uso de algo: %ld\n", rusage.ru_stime.tv_sec);
+      sleep(1);
+    }
+
+    kill(pid, SIGKILL);
   } else {
     // tá no processo filho
     if (strcmp(argv[1], "cpu") == 0) {
-      //uso de cpu
-      for (;;) {}
+      for (;;) {} //uso de cpu
     } else if (strcmp(argv[1], "cpu-mem") == 0) {
-      //uso de cpu + memória
-      for (;;) {
+      for (;;) { //uso de cpu + memória
         malloc(sizeof(1));
       }
     }
@@ -36,4 +41,6 @@ int main(int argc, char *argv[], char *envp[]) {
      *long   ru_maxrss;
        struct timeval ru_utime; user CPU time used*/
   }
+
+  return 0;
 }
