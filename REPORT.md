@@ -1,6 +1,6 @@
 # Identificação
 
-* Página do repositório do trabalho ([link GitHub](https://github.com/marinalimeira/teaching/tree/master/2015.1-IAC-trabalho-pratico))
+* Página do repositório do trabalho ([link GitHub](https://github.com/marinalimeira/2015.1-IAC-trabalho-pratico))
 
 * Discente 1
 	* Nome: Marina Francino Lessa Neto Limeira
