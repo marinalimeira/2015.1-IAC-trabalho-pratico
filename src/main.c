@@ -1,40 +1,35 @@
-#include <stdio.h>
 #include <sys/time.h>
 #include <sys/resource.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <sys/types.h>
 #include <signal.h>
+#include <stdio.h>
+#include <time.h>
 
 int main(int argc, char *argv[], char *envp[]) {
 
-  struct rusage rusage;
+  /* struct rusage rusage; */
   int pid = fork();
   int i;
+  double count_time;
   double seconds;
-  clock_t hour, hour_last;
+  clock_t hour, second_last;
+  char cmd[50];
 
   if (pid < 0){
     perror ("Error: ");
   } else if (pid > 0) {
-    for (i = 0; i < 10; i++){
-      if (i != 1){
-        do{
-          hour = clock();
-          seconds = (hour - hour_last) / (double)CLOCKS_PER_SEC;
-        } while(seconds < 1);
-      hour_last = hour;
-      }
-      else{
-        hour_last = clock();
-      }
-      getrusage(pid, &rusage);
-      printf("Uso da Memória: %ld\n", rusage.ru_maxrss);
-    /* by Lage:
-     * guarde a cada segundo o consumo de memória (em Kilobytes) e
-     * CPU (em porcentagem) do processo filho
-     * após 10 segundos de execução, mate o proceso filho*/
-      printf("Uso de algo: %ld\n", rusage.ru_stime.tv_sec);
+    for (i = 1; i <= 10; i++){
+      second_last = clock();
+      do {
+        hour = clock();
+        seconds = (hour - second_last) / (double)CLOCKS_PER_SEC;
+      } while(seconds < 1);
+
+      sprintf(cmd, "ps -p %d -o %%cpu,rss | tee -a result.txt", pid);
+      system(cmd);
     }
 
     kill(pid, SIGKILL);
@@ -47,10 +42,6 @@ int main(int argc, char *argv[], char *envp[]) {
         malloc(sizeof(1));
       }
     }
-     /* rusage.ru_mxrss //memoria
-     *       .ru_utime.tv_sec //cpu
-     *long   ru_maxrss;
-       struct timeval ru_utime; user CPU time used*/
   }
 
   return 0;
