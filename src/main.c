@@ -21,6 +21,8 @@ int main(int argc, char *argv[], char *envp[]) {
   if (pid < 0){
     perror ("Error: ");
   } else if (pid > 0) {
+    sprintf(cmd, "ps -p %d -o %%cpu,rss | tee -a result.txt", pid);
+    system(cmd);
     for (i = 1; i <= 10; i++){
       second_last = clock();
       do {
@@ -31,7 +33,7 @@ int main(int argc, char *argv[], char *envp[]) {
       sprintf(cmd, "ps -p %d -o %%cpu,rss | tee -a result.txt", pid);
       system(cmd);
     }
-
+    //gerar novos gráficos 
     kill(pid, SIGKILL);
   } else {
     // tá no processo filho

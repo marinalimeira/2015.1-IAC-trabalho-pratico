@@ -27,6 +27,8 @@ for (;;) {}
 ```
 
 Podemos observar que a função utilizada desta forma gera um loop infinito que impede que outros processos interrompam o que está sendo executado. Quando o programa foi testado com a entrada ```cpu```, os seguintes resultados foram encontrados:
+![cpu](img/cpu.png)
+
 
 Os gráficos foram gerados no mesmo contexto do algoritmo escrito que monitora a utilização da UCP a cada segundo pelo processo, controlada pela função ```clock()``` que determina o intervalo de consulta. Sendo assim, o gráfico demonstra o uso da UCP medida a cada segundo durante dez segundos. No instante zero, o processo é recém-criado e portanto ainda se encontra em espera para execução que acontece no próximo segundo. Como garantido anteriormente pelo código ```for (;;;) {}```  a utilização de UCP pelo processo é máxima, sendo os 25% mostrado no gráfico a representação disso – observando que arquitetura do computador usado para experimentação contém  quatro núcleos e que cada núcleo é utilizado por vez, explica-se os 25% como um quarto do sistema de processamento total da máquina. Já a utilização da memória é constante, pois não foi feita alocação dinâmica no programa.
 
@@ -41,7 +43,9 @@ for (;;) {
 }
 ```
 
-Como na outra função, essa também gera um loop infinito. Além disso, ela aloca a cada loop XXXX bits, gerando um uso de memória escalável e intensa a cada instante. Por conta do rápido aumento no uso da memória, durante o desenvolvimento e experimentação do código, houve complicações com o sistema. O que foi resolvido com uma mudança no valor passado a função ```malloc()``` para um número menor que ainda ao final da execução não alocasse toda a memória causando travamento do sistema. Os seguintes gráficos foram gerados com a entrada ```cpu-mem``` na experimentação:
+Como na outra função, essa também gera um loop infinito. Além disso, ela aloca a cada loop 4 bits, gerando um uso de memória escalável e intensa a cada instante. Por conta do rápido aumento no uso da memória, durante o desenvolvimento e experimentação do código, houve complicações com o sistema. O que foi resolvido com uma mudança no valor passado a função ```malloc()``` para um número menor que ainda ao final da execução não alocasse toda a memória causando travamento do sistema. Os seguintes gráficos foram gerados com a entrada ```cpu-mem``` na experimentação:
+![cpu-mem](img/cpu-mem1.png)
+![cpu-mem](img/cpu-mem2.png)
 
 O comportamento do uso de memória é representa por uma reta crescente, devido a alocação a cada loop ser feita com o mesmo tamanho de espaço de memória. O uso de UCP apresenta um comportamento crescente no início, mas prossegue inconsistente depois de determinado tempo, representando as interrupções de outros processos requisitando o uso do processador. 
 
