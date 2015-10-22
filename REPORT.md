@@ -47,7 +47,7 @@ Como na outra função, essa também gera um loop infinito. Além disso, ela alo
 ![cpu-mem](img/cpu-mem1.png)
 ![cpu-mem](img/cpu-mem2.png)
 
-O comportamento do uso de memória é representa por uma reta crescente, devido a alocação a cada loop ser feita com o mesmo tamanho de espaço de memória. O uso de UCP apresenta um comportamento crescente no início, mas prossegue inconsistente depois de determinado tempo, representando as interrupções de outros processos requisitando o uso do processador. 
+O comportamento do uso de memória é representa por uma reta crescente, devido a alocação a cada loop ser feita com o mesmo tamanho de espaço de memória, porém a reta decresce devido a falta de recursos possíveis para serem alocados, então o sistema operacional mata o processo filho. O uso de UCP apresenta um comportamento crescente no início, mas prossegue inconsistente depois de determinado tempo, representando as interrupções de outros processos requisitando o uso do processador. 
 
 
 
