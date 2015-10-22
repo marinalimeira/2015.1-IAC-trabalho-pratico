@@ -17,3 +17,9 @@ gcc src/main.c -o bin
 ./bin "cpu-mem"
 ```
 
+### Geração de gráficos
+* É necessário possuir python e matplotlib instalados.
+```
+python results.py 
+```
+
